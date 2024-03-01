@@ -1,4 +1,4 @@
-const {SlashCommandBuilder, EmbedBuilder, Interaction, Client } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Interaction, Client } = require('discord.js');
 const { useQueue } = require('discord-player');
 
 module.exports = {
@@ -8,14 +8,14 @@ module.exports = {
         .addStringOption(option => {
             return option.setName('busca').setDescription('Buscar uma música!').setRequired(true)
         }),
-    
-        
+
+
     /**
      * 
      * @param {Client} client 
      *  
      */
-    async execute({client, interaction}) {
+    async execute({ client, interaction }) {
         if (!interaction.member.voice.channel) {
 
             await interaction.reply('Você deve estar conectado em um canal para solicitar músicas!');
@@ -36,19 +36,14 @@ module.exports = {
         }
 
         const result = await client.player.search(query);
-        
-        //console.log(result);
 
         try {
-
-
-            console.log('Erro aqui');
 
             const { track } = await client.player.play(interaction.member.voice.channel, result, {
                 nodeOptions: {
                     metadata: interaction.channel
                 }
-            }); 
+            });
 
 
             console.log(track);
@@ -62,16 +57,17 @@ module.exports = {
                     ]
                 })
             }
-            
+
 
 
             if (queue.currentTrack === track) {
-                
+
                 return interaction.followUp({
                     embeds: [
                         new EmbedBuilder().setDescription(`**Nossa, que delícia, Cada segundo com você é um orgasmo diferente 💦🤤🦃** 
                             \n${track.title} (${track.url})`).setThumbnail(track.thumbnail)
-                ]})
+                    ]
+                })
             }
 
             return interaction.followUp({
@@ -88,7 +84,7 @@ module.exports = {
 
             console.log(error);
         }
-        
+
 
     }
 }

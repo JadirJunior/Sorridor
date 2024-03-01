@@ -1,12 +1,12 @@
-const {SlashCommandBuilder, EmbedBuilder} = require('discord.js');
-const {useQueue} = require('discord-player');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { useQueue } = require('discord-player');
 
 const modelo = [
     'Loop desligado', //0
     'Loop da música', //1
     'Loop da Fila' //2
 ]
-    
+
 
 
 
@@ -17,28 +17,26 @@ module.exports = {
         .setDescription('Ativar repetição de música')
         .addStringOption(option => {
             return option.setName('modo')
-            .setDescription('Escolha o modo de repetição -> One: Música Off: Desligado')
-            .addChoices(
-                { name: 'one', value: 'one' },
-                { name: 'off', value: 'off'}
-            ).setRequired(true)
+                .setDescription('Escolha o modo de repetição -> One: Música; Off: Desligado; On: Fila')
+                .addChoices({ name: 'one', value: 'one' }, { name: 'off', value: 'off' }, { name: 'on', value: 'on' }).setRequired(true)
         }),
-    
-    async execute({client, interaction}) {
+
+    async execute({ client, interaction }) {
 
         const queue = useQueue(interaction.guild.id);
 
-        if (!queue || !queue.isPlaying()) 
+        if (!queue || !queue.isPlaying())
             return interaction.reply(`Opa, parece que não estou em nenhum lugar, mas se quiser que seja dentro de você, ficarei grato, querido \n👉👌🔞🦃`);
 
 
         const param = interaction.options.getString('modo');
+        console.log("Modo: " + param);
 
         await interaction.deferReply();
 
-        var mode;
+        var mode; //= Number(param.toLowerCase().trim()) || -1;
 
-        if (!param) {
+        if (param.toLowerCase().trim() == "on") {
             //Fila
             mode = 2;
         } else {
